@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI;
+package GUI.JPanels;
 
 import Classes.User;
+import GUI.JFrames.Login;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
@@ -13,7 +14,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import org.bson.Document;
 
 /**
@@ -66,6 +69,7 @@ public class ShowProfile extends javax.swing.JPanel {
         PasswordProfile = new javax.swing.JPasswordField();
         ButtomProfile = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
+        logOut = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(620, 470));
         addContainerListener(new java.awt.event.ContainerAdapter() {
@@ -76,7 +80,7 @@ public class ShowProfile extends javax.swing.JPanel {
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Correo Electronico");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(94, 113, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 100, -1, -1));
 
         NameProfile.setEditable(false);
         NameProfile.addActionListener(new java.awt.event.ActionListener() {
@@ -84,10 +88,10 @@ public class ShowProfile extends javax.swing.JPanel {
                 NameProfileActionPerformed(evt);
             }
         });
-        add(NameProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, 205, -1));
+        add(NameProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 205, -1));
 
         jLabel2.setText("Nombre");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(103, 51, -1, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, -1, -1));
 
         EmailProfile.setEditable(false);
         EmailProfile.addActionListener(new java.awt.event.ActionListener() {
@@ -95,14 +99,14 @@ public class ShowProfile extends javax.swing.JPanel {
                 EmailProfileActionPerformed(evt);
             }
         });
-        add(EmailProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, 205, -1));
+        add(EmailProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 120, 205, -1));
 
         jLabel3.setText("Contrasena");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 167, -1, -1));
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, -1, -1));
 
         PasswordProfile.setEditable(false);
         PasswordProfile.setText("jPasswordField1");
-        add(PasswordProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 203, 200, 20));
+        add(PasswordProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 210, 20));
 
         ButtomProfile.setText("Editar Perfil");
         ButtomProfile.addActionListener(new java.awt.event.ActionListener() {
@@ -110,11 +114,19 @@ public class ShowProfile extends javax.swing.JPanel {
                 ButtomProfileActionPerformed(evt);
             }
         });
-        add(ButtomProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 303, -1, -1));
+        add(ButtomProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, -1, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setText("Error Label");
-        add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 440, -1, -1));
+        add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, -1, -1));
+
+        logOut.setText("Cerrar sesion");
+        logOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logOutActionPerformed(evt);
+            }
+        });
+        add(logOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void NameProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameProfileActionPerformed
@@ -196,6 +208,12 @@ public class ShowProfile extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentAdded
 
+    private void logOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logOutActionPerformed
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(ShowProfile.this);                
+        parentFrame.dispose();
+        new Login(client).setVisible(true);
+    }//GEN-LAST:event_logOutActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtomProfile;
@@ -206,5 +224,6 @@ public class ShowProfile extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton logOut;
     // End of variables declaration//GEN-END:variables
 }

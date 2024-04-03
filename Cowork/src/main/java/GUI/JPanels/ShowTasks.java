@@ -2,15 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI;
+package GUI.JPanels;
 
 import Classes.Group;
 import Classes.User;
+import static GUI.JPanels.TaskPanel.client;
+import static GUI.JPanels.TaskPanel.currentUser;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -22,48 +23,56 @@ import org.bson.Document;
  *
  * @author mairo
  */
-public class ShowInvitations extends javax.swing.JPanel {
-    User currentUser;     
-    MongoClient client;
+public class ShowTasks extends javax.swing.JPanel {
+    static User currentUser;    
+    static MongoClient client;
     
-    public ShowInvitations(User currentUser, MongoClient client) {
+    public ShowTasks(User currentUser, MongoClient client) {
         initComponents();
-        setLayout(new GridBagLayout());
-        this.currentUser = currentUser;        
+        this.currentUser = currentUser;
         this.client = client;
-        
-        initInvitations();
+        setLayout(new GridBagLayout());
     }
     
-    private void initInvitations(){
-        MongoDatabase dataBase = client.getDatabase("cowork");
-        MongoCollection users = dataBase.getCollection("users");
+    private void initTasks(){
+       MongoDatabase dataBase = client.getDatabase("cowork");
+        MongoCollection groups = dataBase.getCollection("groups");
         
-        Document userDoc = (Document) users.find(new Document("email", currentUser.getEmail())).first();
-        ArrayList<String> userInvitations = (ArrayList<String>) userDoc.get("invitations");          
+        FindIterable<Document> groupDocs = groups.find();
+        ArrayList<Document> allGroups = new ArrayList();
         
-        if(userInvitations != null){
+        for(Document groupDoc: groupDocs){            
+            ArrayList<Document> auxMembers = (ArrayList<Document>) groupDoc.get("members");
+            
+            for(Document member: auxMembers){
+                if(member.get("email").equals(currentUser.getEmail())){
+                    allGroups.add(groupDoc);
+                }
+            }
+        }
+        
+        for(Document groupDoc: allGroups){
+            ArrayList<Document> tasksDocs = (ArrayList<Document>) groupDoc.get("tasks");
+            
             int i = 0;
-            for(String invitation: userInvitations){
-                System.out.println(invitation);
+            for(Document tasksDoc: tasksDocs){
                 GridBagConstraints gbc = new GridBagConstraints();
                 gbc.fill = GridBagConstraints.BOTH; 
-                gbc.insets = new Insets(5, 5, 5, 5);
-
-                JPanel panel = createInvitationPanel(invitation);
+                gbc.insets = new Insets(5, 5, 5, 5); 
+                
+                String taskName = (String) tasksDoc.get("taskName");
+                String groupName = (String) groupDoc.get("nameGroup");
+                JPanel panel = createTaskPanel(taskName, groupName);
                 gbc.gridx = i % 4; 
                 gbc.gridy = i / 4;
                 add(panel, gbc);
-                i++;                        
-            }            
-        }
-        else{
-            
-        }                               
+                i++;
+            }
+        } 
     }
     
-    private JPanel createInvitationPanel(String invitation) {
-        InvitationPanel panel = new InvitationPanel(currentUser, invitation, client);
+    private JPanel createTaskPanel(String taskName, String groupName){
+        TaskPanel panel = new TaskPanel(taskName, groupName, client);
         return panel;
     }
 
@@ -80,7 +89,7 @@ public class ShowInvitations extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 630, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

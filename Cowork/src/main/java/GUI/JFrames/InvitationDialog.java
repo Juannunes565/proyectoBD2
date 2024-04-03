@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package GUI.JFrames;
 
 import Classes.Group;
 import Classes.User;
@@ -181,6 +181,10 @@ public class InvitationDialog extends javax.swing.JFrame {
         if(email.isBlank()){
             errorLabel.setText("Error: ingrese todos los campos del formulario");
         }
+        else if(!email.contains("@gmail.com") && !email.contains("@hotmail.com") && 
+                !email.contains("@correo.unimet.edu.ve") && !email.contains("@outlook.com")){
+            errorLabel.setText("Error: correo no valido");
+        }
         else{
             
             MongoDatabase dataBase = client.getDatabase("cowork");
@@ -198,7 +202,8 @@ public class InvitationDialog extends javax.swing.JFrame {
             
             boolean isMember = false;
             for(Document member: members){
-                if(member.get("email").equals(currentUser.getEmail())){
+                System.out.println(member.get("email") + " " + currentUser.getEmail());
+                if(member.get("email").equals(email)){
                     isMember = true;
                 }
             }

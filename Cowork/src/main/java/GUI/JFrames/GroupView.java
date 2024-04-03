@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package GUI.JFrames;
 
 import Classes.Group;
 import Classes.User;
@@ -30,6 +30,12 @@ public class GroupView extends javax.swing.JFrame {
         this.currentGroup = currentGroup;
         this.client = client;
         
+        if(!this.currentUser.getEmail().equals(this.currentGroup.getLeaderEmail())){
+            invite.setVisible(false);
+            createTask.setVisible(false);
+        }
+        
+        errorLabel.setText("");
         groupNameOutput.setText(currentGroup.getNameGroup());
         emailLeaderOutput.setText(currentGroup.getLeaderEmail());
         
@@ -68,6 +74,7 @@ public class GroupView extends javax.swing.JFrame {
         membersOutput = new javax.swing.JTextArea();
         invite = new javax.swing.JToggleButton();
         createTask = new javax.swing.JButton();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -160,7 +167,16 @@ public class GroupView extends javax.swing.JFrame {
         background.add(invite, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 320, 110, -1));
 
         createTask.setText("Crear tarea");
+        createTask.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createTaskActionPerformed(evt);
+            }
+        });
         background.add(createTask, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, -1, -1));
+
+        errorLabel.setForeground(new java.awt.Color(255, 0, 0));
+        errorLabel.setText("Error Label");
+        background.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -214,8 +230,12 @@ public class GroupView extends javax.swing.JFrame {
     }//GEN-LAST:event_headerMouseDragged
 
     private void inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteActionPerformed
-        new InvitationDialog(currentUser, currentGroup, client).setVisible(true);
+        new InvitationDialog(currentUser, currentGroup, client).setVisible(true);                    
     }//GEN-LAST:event_inviteActionPerformed
+
+    private void createTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createTaskActionPerformed
+        new TaskDialog(currentUser, currentGroup, client).setVisible(true);
+    }//GEN-LAST:event_createTaskActionPerformed
 
     /**
      * @param args the command line arguments
@@ -257,6 +277,7 @@ public class GroupView extends javax.swing.JFrame {
     private javax.swing.JPanel background;
     private javax.swing.JButton createTask;
     private javax.swing.JLabel emailLeaderOutput;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JButton exit;
     private javax.swing.JLabel groupNameOutput;
     private javax.swing.JPanel header;

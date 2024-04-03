@@ -16,10 +16,10 @@ public class Group {
     private String nameGroup;
     private String LeaderEmail;
     private ArrayList<Document> members;
-    private ArrayList<Task> tasks;
+    private ArrayList<Document> tasks;
     private Color colorGroup;
 
-    public Group(String groupName, String LeaderEmail, ArrayList<Document> members, ArrayList<Task> tasks, Color groupColor) {
+    public Group(String groupName, String LeaderEmail, ArrayList<Document> members, ArrayList<Document> tasks, Color groupColor) {
         this.nameGroup = groupName;
         this.LeaderEmail = LeaderEmail;
         this.members = members;
@@ -59,13 +59,14 @@ public class Group {
         this.colorGroup = colorGroup;
     }
 
-    public ArrayList<Task> getTasks() {
+    public ArrayList<Document> getTasks() {
         return tasks;
     }
 
-    public void setTasks(ArrayList<Task> tasks) {
+    public void setTasks(ArrayList<Document> tasks) {
         this.tasks = tasks;
     }
+    
 
     @Override
     public String toString() {

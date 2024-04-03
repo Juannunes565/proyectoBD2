@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package GUI.JFrames;
 
 import Classes.Group;
-import Classes.Task;
 import Classes.User;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;

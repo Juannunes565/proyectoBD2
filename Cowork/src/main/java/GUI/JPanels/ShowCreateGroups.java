@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package GUI;
+package GUI.JPanels;
 
 import Classes.Group;
 import Classes.User;
@@ -17,11 +17,11 @@ import org.bson.Document;
  *
  * @author mairo
  */
-public class CreateGroups extends javax.swing.JPanel {
+public class ShowCreateGroups extends javax.swing.JPanel {
     User currentUser;
     MongoClient client;
     
-    public CreateGroups(User currentUser, MongoClient client) {
+    public ShowCreateGroups(User currentUser, MongoClient client) {
         initComponents();
         this.currentUser = currentUser;
         this.client = client;

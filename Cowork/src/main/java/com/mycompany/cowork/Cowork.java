@@ -3,9 +3,8 @@
  */
 
 package com.mycompany.cowork;
-import GUI.Login;
-import GUI.Window;
-import authentication.authentication;
+import GUI.JFrames.Login;
+import GUI.JFrames.Window;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.MongoException;

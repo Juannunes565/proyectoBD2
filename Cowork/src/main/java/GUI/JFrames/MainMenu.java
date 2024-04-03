@@ -2,14 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
+package GUI.JFrames;
 
 import Classes.User;
+import GUI.JPanels.ShowCreateGroups;
+import GUI.JPanels.ShowGroups;
+import GUI.JPanels.ShowInvitations;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
-import GUI.ShowProfile;
+import GUI.JPanels.ShowProfile;
+import GUI.JPanels.ShowProfile;
+import GUI.JPanels.ShowTasks;
 import com.mongodb.client.MongoClient;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -120,7 +125,7 @@ public class MainMenu extends javax.swing.JFrame {
         header.add(minimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 0, 30, 30));
 
         testLabel.setText("Menu principal");
-        header.add(testLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, -1, -1));
+        header.add(testLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 6, -1, 20));
 
         background.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 730, 30));
         background.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, 20));
@@ -241,7 +246,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_headerMouseDragged
 
     private void showCreateGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCreateGroupsActionPerformed
-        CreateGroups panel = new CreateGroups(currentUser, client);   
+        ShowCreateGroups panel = new ShowCreateGroups(currentUser, client);   
         panel.setLocation(0, 0);
         
         rightContainer.setViewportView(panel);
@@ -266,7 +271,6 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_showGroupsActionPerformed
 
     private void showProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showProfileActionPerformed
-        // TODO add your handling code here:        
         ShowProfile panel = new ShowProfile(currentUser, client);   
         panel.setLocation(0, 0);
         
@@ -279,7 +283,15 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_showProfileActionPerformed
 
     private void showTasksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTasksActionPerformed
-         
+        ShowTasks panel = new ShowTasks(currentUser, client);   
+        panel.setLocation(0, 0);
+        
+        rightContainer.setViewportView(panel);
+        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);                
+        rightContainer.setViewportView(panel);
+        rightContainer.revalidate();
+        rightContainer.repaint(); 
     }//GEN-LAST:event_showTasksActionPerformed
 
     private void showInvitationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showInvitationsActionPerformed
