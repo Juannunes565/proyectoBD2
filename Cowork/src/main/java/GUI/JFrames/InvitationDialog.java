@@ -51,6 +51,7 @@ public class InvitationDialog extends javax.swing.JFrame {
         emailInput = new javax.swing.JTextField();
         send = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -112,17 +113,22 @@ public class InvitationDialog extends javax.swing.JFrame {
         background.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, 20));
         background.add(emailInput, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 270, -1));
 
+        send.setBackground(new java.awt.Color(243, 243, 243));
         send.setText("Enviar");
+        send.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         send.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sendActionPerformed(evt);
             }
         });
-        background.add(send, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, -1, -1));
+        background.add(send, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 70, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setText("Error Label");
         background.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
+
+        jLabel2.setText("Ingrese el correo del usuario a invitar");
+        background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -268,6 +274,7 @@ public class InvitationDialog extends javax.swing.JFrame {
     private javax.swing.JButton exit;
     private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JButton minimize;
     private javax.swing.JButton send;
     // End of variables declaration//GEN-END:variables

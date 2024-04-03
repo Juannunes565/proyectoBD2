@@ -18,17 +18,35 @@ import org.bson.Document;
  * @author mairo
  */
 public class TaskPanel extends javax.swing.JPanel {
-    static User currentUser;
-    static Group currentGroup;
+    static User currentUser;    
     static MongoClient client;
+    Document task;
     
-    public TaskPanel(String taskName, String groupName, MongoClient client) {
+    
+    public TaskPanel(String idTask, User currentUser, MongoClient client) {
         initComponents();
-        this.currentUser = currentUser;
-        this.currentGroup = currentGroup;
+        this.currentUser = currentUser;        
         this.client = client;
+        this.task = null;
         
+        MongoDatabase dataBase = client.getDatabase("cowork");
+        MongoCollection groups = dataBase.getCollection("groups");
+        FindIterable<Document> itereble = groups.find();
+        for(Document group: itereble){
+            ArrayList<Document> tasksList = (ArrayList) group.get("tasks");
+            
+            for(Document taskDoc: tasksList){
+                if(taskDoc.get("idTask").equals(idTask)){
+                    this.task = taskDoc;                    
+                }
+            }
+        }
         
+        if(this.task != null){
+            taskLabel.setText((String) this.task.get("taskName"));
+            descriptionTask.setText((String) this.task.get("description"));
+        }
+   
     }
     
     
@@ -43,19 +61,20 @@ public class TaskPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         taskLabel = new javax.swing.JLabel();
-        view = new javax.swing.JButton();
-        groupLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        descriptionTask = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         taskLabel.setText("TaskLabel");
 
-        view.setText("Ver");
-        view.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                viewActionPerformed(evt);
-            }
-        });
+        descriptionTask.setColumns(20);
+        descriptionTask.setRows(5);
+        descriptionTask.setEnabled(false);
+        jScrollPane1.setViewportView(descriptionTask);
 
-        groupLabel.setText("GroupLabel");
+        jLabel1.setText("Descripcion");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -64,61 +83,33 @@ public class TaskPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(view))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
+                        .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(groupLabel)
-                            .addComponent(taskLabel))))
-                .addContainerGap(81, Short.MAX_VALUE))
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(118, 118, 118)
+                        .addComponent(taskLabel)))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(groupLabel)
-                .addGap(18, 18, 18)
+                .addGap(37, 37, 37)
                 .addComponent(taskLabel)
-                .addGap(18, 18, 18)
-                .addComponent(view)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewActionPerformed
-        
-        MongoDatabase dataBase = client.getDatabase("cowork");
-        MongoCollection groups = dataBase.getCollection("groups");
-        
-        FindIterable<Document> groupDocs = groups.find();
-        ArrayList<Document> allGroups = new ArrayList();
-        
-        for(Document groupDoc: groupDocs){            
-            ArrayList<Document> auxMembers = (ArrayList<Document>) groupDoc.get("members");
-            
-            for(Document member: auxMembers){
-                if(member.get("email").equals(currentUser.getEmail())){
-                    allGroups.add(groupDoc);
-                }
-            }
-        }
-        
-        for(Document groupDoc: allGroups){
-            ArrayList<Document> tasksDocs = (ArrayList<Document>) groupDoc.get("tasks");
-            
-            for(Document tasksDoc: tasksDocs){
-                
-            }
-        }
-        
-        
-    }//GEN-LAST:event_viewActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel groupLabel;
+    private javax.swing.JTextArea descriptionTask;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel taskLabel;
-    private javax.swing.JButton view;
     // End of variables declaration//GEN-END:variables
 }

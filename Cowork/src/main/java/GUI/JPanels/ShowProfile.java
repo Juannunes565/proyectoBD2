@@ -108,25 +108,29 @@ public class ShowProfile extends javax.swing.JPanel {
         PasswordProfile.setText("jPasswordField1");
         add(PasswordProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 190, 210, 20));
 
+        ButtomProfile.setBackground(new java.awt.Color(243, 243, 243));
         ButtomProfile.setText("Editar Perfil");
+        ButtomProfile.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ButtomProfile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ButtomProfileActionPerformed(evt);
             }
         });
-        add(ButtomProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, -1, -1));
+        add(ButtomProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 260, 90, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setText("Error Label");
         add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, -1, -1));
 
+        logOut.setBackground(new java.awt.Color(243, 243, 243));
         logOut.setText("Cerrar sesion");
+        logOut.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         logOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logOutActionPerformed(evt);
             }
         });
-        add(logOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, -1, -1));
+        add(logOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 90, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void NameProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NameProfileActionPerformed

@@ -32,6 +32,8 @@ public class ShowTasks extends javax.swing.JPanel {
         this.currentUser = currentUser;
         this.client = client;
         setLayout(new GridBagLayout());
+        
+        initTasks();
     }
     
     private void initTasks(){
@@ -62,7 +64,7 @@ public class ShowTasks extends javax.swing.JPanel {
                 
                 String taskName = (String) tasksDoc.get("taskName");
                 String groupName = (String) groupDoc.get("nameGroup");
-                JPanel panel = createTaskPanel(taskName, groupName);
+                JPanel panel = createTaskPanel((String) tasksDoc.get("idTask"));
                 gbc.gridx = i % 4; 
                 gbc.gridy = i / 4;
                 add(panel, gbc);
@@ -71,8 +73,8 @@ public class ShowTasks extends javax.swing.JPanel {
         } 
     }
     
-    private JPanel createTaskPanel(String taskName, String groupName){
-        TaskPanel panel = new TaskPanel(taskName, groupName, client);
+    private JPanel createTaskPanel(String idTask){
+        TaskPanel panel = new TaskPanel(idTask, currentUser, client);
         return panel;
     }
 

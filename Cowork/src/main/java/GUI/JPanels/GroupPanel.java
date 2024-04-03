@@ -42,8 +42,9 @@ public class GroupPanel extends javax.swing.JPanel {
 
         groupName.setText("name");
 
-        viewGroup.setBackground(new java.awt.Color(252, 252, 252));
+        viewGroup.setBackground(new java.awt.Color(243, 243, 243));
         viewGroup.setText("ver");
+        viewGroup.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         viewGroup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 viewGroupActionPerformed(evt);
@@ -57,12 +58,12 @@ public class GroupPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(viewGroup))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(55, 55, 55)
-                        .addComponent(groupName)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                        .addComponent(groupName))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(viewGroup, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -71,7 +72,7 @@ public class GroupPanel extends javax.swing.JPanel {
                 .addComponent(groupName)
                 .addGap(40, 40, 40)
                 .addComponent(viewGroup)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

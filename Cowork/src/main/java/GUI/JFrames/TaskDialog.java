@@ -31,6 +31,7 @@ public class TaskDialog extends javax.swing.JFrame {
         exit.setFocusable(false);
         minimize.setFocusable(false);
         
+        errorLabel.setText("");
         this.currentUser = currentUser;
         this.currentGroup = currentGroup;
         this.client = client;
@@ -51,6 +52,8 @@ public class TaskDialog extends javax.swing.JFrame {
         inputDescription = new javax.swing.JTextArea();
         create = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -116,19 +119,27 @@ public class TaskDialog extends javax.swing.JFrame {
         inputDescription.setRows(5);
         jScrollPane1.setViewportView(inputDescription);
 
-        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 140, 280, 110));
+        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 280, 110));
 
+        create.setBackground(new java.awt.Color(243, 243, 243));
         create.setText("Crear");
+        create.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         create.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createActionPerformed(evt);
             }
         });
-        background.add(create, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 310, -1, -1));
+        background.add(create, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 310, 90, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setText("Error Label");
         background.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, -1, -1));
+
+        jLabel2.setText("Ingrese nombre de la tarea");
+        background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 70, -1, -1));
+
+        jLabel3.setText("Ingrese descripcion de la tarea");
+        background.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 130, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -195,7 +206,8 @@ public class TaskDialog extends javax.swing.JFrame {
             MongoCollection tasks = dataBase.getCollection("tasks");
             String idTask = Integer.toString(((int) tasks.countDocuments()));
             
-            Document group = (Document) groups.find(new Document("nameGroup", currentGroup.getNameGroup()));
+            Document query = new Document("nameGroup", currentGroup.getNameGroup());
+            Document group = (Document) groups.find(query).first();
             if(group != null){
                 
                 ArrayList groupTasks = (ArrayList) group.get("tasks");
@@ -208,9 +220,9 @@ public class TaskDialog extends javax.swing.JFrame {
                 
                 tasks.insertOne(newTask);
                 
-                Document update = new Document("$set", newTask);
-                groups.updateOne(new Document("nameGroup", currentGroup.getNameGroup()), update);
-                
+                Document update = new Document("$set", new Document("tasks", groupTasks));
+                groups.updateOne(query, update);
+                this.dispose();                
             }
             else{
                 errorLabel.setText("Grupo no encontrado");
@@ -272,6 +284,8 @@ public class TaskDialog extends javax.swing.JFrame {
     private javax.swing.JTextArea inputDescription;
     private javax.swing.JTextField inputTaskName;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton minimize;
     // End of variables declaration//GEN-END:variables

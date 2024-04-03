@@ -158,21 +158,25 @@ public class GroupView extends javax.swing.JFrame {
 
         background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 540, 110));
 
+        invite.setBackground(new java.awt.Color(243, 243, 243));
         invite.setText("Invitar");
+        invite.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         invite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inviteActionPerformed(evt);
             }
         });
-        background.add(invite, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 320, 110, -1));
+        background.add(invite, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 320, 110, -1));
 
+        createTask.setBackground(new java.awt.Color(243, 243, 243));
         createTask.setText("Crear tarea");
+        createTask.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         createTask.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createTaskActionPerformed(evt);
             }
         });
-        background.add(createTask, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, -1, -1));
+        background.add(createTask, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 320, 80, -1));
 
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setText("Error Label");

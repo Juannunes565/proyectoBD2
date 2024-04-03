@@ -50,6 +50,8 @@ public class ShowCreateGroups extends javax.swing.JPanel {
         inputColors = new javax.swing.JComboBox<>();
         create = new javax.swing.JButton();
         errorLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(620, 470));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -69,9 +71,18 @@ public class ShowCreateGroups extends javax.swing.JPanel {
         errorLabel.setForeground(new java.awt.Color(255, 0, 0));
         errorLabel.setText("Error Label");
         add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, -1, -1));
+
+        jLabel1.setText("Ingrese el nombre del grupo");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 90, -1, -1));
+
+        jLabel2.setText("Ingrese color del grupo");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 190, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void createActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createActionPerformed
+        errorLabel.setForeground(Color.red);
+        errorLabel.setText("");
+        
         String groupName = inputGroupName.getText();
         String groupColor = (String) inputColors.getSelectedItem();
         
@@ -103,6 +114,8 @@ public class ShowCreateGroups extends javax.swing.JPanel {
                         .append("colorGroup", groupColor);
                 
                 groups.insertOne(newGroupDoc);
+                errorLabel.setForeground(Color.green);
+                errorLabel.setText("Grupo creado con exito!");
                                                                                                                   }
             else{
                 System.out.println("Si existe");
@@ -118,5 +131,7 @@ public class ShowCreateGroups extends javax.swing.JPanel {
     private javax.swing.JLabel errorLabel;
     private javax.swing.JComboBox<String> inputColors;
     private javax.swing.JTextField inputGroupName;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }

@@ -190,8 +190,8 @@ public class MainMenu extends javax.swing.JFrame {
 
         background.add(leftContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 110, 470));
 
-        rightContainer.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        rightContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        rightContainer.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        rightContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         background.add(rightContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 620, 470));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -262,8 +262,8 @@ public class MainMenu extends javax.swing.JFrame {
         panel.setLocation(0, 0);
         
         rightContainer.setViewportView(panel);
-        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);                
+        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);                
         rightContainer.setViewportView(panel);
         rightContainer.revalidate();
         rightContainer.repaint();  
