@@ -25,5 +25,10 @@
             <artifactId>slf4j-jdk14</artifactId>
             <version>1.7.28</version>
         </dependency>
+        <dependency>
+            <groupId>org.netbeans.external</groupId>
+            <artifactId>AbsoluteLayout</artifactId>
+            <version>RELEASE210</version>
+        </dependency>
     </dependencies>
 </project>
