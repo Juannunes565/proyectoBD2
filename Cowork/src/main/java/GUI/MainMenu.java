@@ -5,7 +5,9 @@
 package GUI;
 
 import Classes.User;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 
 /**
  *
@@ -15,13 +17,17 @@ public class MainMenu extends javax.swing.JFrame {
     int xMouse, yMouse;
     static User currentUser;
     
+    
     public MainMenu(User currentUser) {
         initComponents();
         this.currentUser = currentUser;
+        this.setLocationRelativeTo(this);
         
+        showTasks.setFocusable(true);
         testLabel.setText("Hola " + currentUser.getName());
         exit.setFocusable(false);
         minimize.setFocusable(false);
+        
     }
 
     /**
@@ -33,12 +39,18 @@ public class MainMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup = new javax.swing.ButtonGroup();
         background = new javax.swing.JPanel();
         header = new javax.swing.JPanel();
         exit = new javax.swing.JButton();
         minimize = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         testLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        leftContainer = new javax.swing.JPanel();
+        showTasks = new javax.swing.JToggleButton();
+        showGroups = new javax.swing.JToggleButton();
+        showProfile = new javax.swing.JToggleButton();
+        rightContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -96,11 +108,52 @@ public class MainMenu extends javax.swing.JFrame {
         });
         header.add(minimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 0, 30, 30));
 
+        testLabel.setText("Menu principal");
+        header.add(testLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, -1, -1));
+
         background.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 730, 30));
         background.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, 20));
 
-        testLabel.setText("Menu principal");
-        background.add(testLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 190, -1, -1));
+        leftContainer.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        leftContainer.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        showTasks.setBackground(new java.awt.Color(252, 252, 252));
+        buttonGroup.add(showTasks);
+        showTasks.setText("Ver tareas");
+        showTasks.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        showTasks.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showTasksActionPerformed(evt);
+            }
+        });
+        leftContainer.add(showTasks, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 80));
+
+        showGroups.setBackground(new java.awt.Color(252, 252, 252));
+        buttonGroup.add(showGroups);
+        showGroups.setText("Ver grupos");
+        showGroups.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        leftContainer.add(showGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 110, 80));
+
+        showProfile.setBackground(new java.awt.Color(252, 252, 252));
+        buttonGroup.add(showProfile);
+        showProfile.setText("Ver perfil");
+        showProfile.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        leftContainer.add(showProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 110, 80));
+
+        background.add(leftContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 110, 470));
+
+        javax.swing.GroupLayout rightContainerLayout = new javax.swing.GroupLayout(rightContainer);
+        rightContainer.setLayout(rightContainerLayout);
+        rightContainerLayout.setHorizontalGroup(
+            rightContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 620, Short.MAX_VALUE)
+        );
+        rightContainerLayout.setVerticalGroup(
+            rightContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 470, Short.MAX_VALUE)
+        );
+
+        background.add(rightContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 620, 470));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,7 +163,7 @@ public class MainMenu extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -153,6 +206,17 @@ public class MainMenu extends javax.swing.JFrame {
         this.setLocation(x - xMouse, y - yMouse);
     }//GEN-LAST:event_headerMouseDragged
 
+    private void showTasksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTasksActionPerformed
+        ShowTasks panel = new ShowTasks();             
+        panel.setLocation(0, 0);
+        
+        rightContainer.removeAll();
+        rightContainer.setPreferredSize(new Dimension(rightContainer.getWidth(), panel.getHeight()));
+        rightContainer.add(panel);
+        rightContainer.revalidate();
+        rightContainer.repaint();        
+    }//GEN-LAST:event_showTasksActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -191,10 +255,16 @@ public class MainMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
+    private javax.swing.ButtonGroup buttonGroup;
     private javax.swing.JButton exit;
     private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel leftContainer;
     private javax.swing.JButton minimize;
+    private javax.swing.JPanel rightContainer;
+    private javax.swing.JToggleButton showGroups;
+    private javax.swing.JToggleButton showProfile;
+    private javax.swing.JToggleButton showTasks;
     private javax.swing.JLabel testLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -344,6 +344,9 @@ public class Register extends javax.swing.JFrame {
         else if(password.equals("Ingrese contraseña") || password.isBlank()){
             errorLabel.setText("Error: Ingrese todos los campos del formulario");
         }
+        else if(password.length() < 8){
+            errorLabel.setText("Error: contraseña muy corta");
+        }
         else if(confirmPassword.equals("Confirmar contraseña") || confirmPassword.isBlank()){
             errorLabel.setText("Error: Ingrese todos los campos del formulario");
         }
