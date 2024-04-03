@@ -32,7 +32,7 @@ public class Cowork {
                 .applyConnectionString(new ConnectionString(connectionString))
                 .serverApi(serverApi)
                 .build();
-                
+        
         MongoClient client = MongoClients.create(settings);
         new Login(client).setVisible(true);
             

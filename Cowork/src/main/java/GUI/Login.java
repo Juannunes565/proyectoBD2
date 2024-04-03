@@ -4,14 +4,27 @@
  */
 package GUI;
 
+import Classes.Group;
+import Classes.Task;
+import Classes.User;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import java.awt.Color;
+import java.util.ArrayList;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 
 
 public class Login extends javax.swing.JFrame {
     int xMouse, yMouse;
     static MongoClient client;
+    
+    
 
     
     public Login(MongoClient client) {
@@ -19,6 +32,7 @@ public class Login extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         this.client = client;
         
+        errorLabel.setText("");
         inputPassword.setEchoChar((char) 0);
         exit.setFocusable(false);
         minimize.setFocusable(false);
@@ -44,6 +58,7 @@ public class Login extends javax.swing.JFrame {
         register = new javax.swing.JLabel();
         inputEmail = new javax.swing.JTextField();
         inputPassword = new javax.swing.JPasswordField();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -177,6 +192,10 @@ public class Login extends javax.swing.JFrame {
         });
         background.add(inputPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 210, 290, 30));
 
+        errorLabel.setForeground(new java.awt.Color(255, 0, 0));
+        errorLabel.setText("Error Label");
+        background.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 370, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -263,7 +282,72 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_registerMouseClicked
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        // TODO add your handling code here:
+        errorLabel.setText("");
+        
+        String email = inputEmail.getText();
+        String password = inputPassword.getText();
+
+        if(email.equals("Ingrese correo electronico") || email.isBlank()){
+            errorLabel.setText("Error: ingrese todos los campos del formulario");
+        }
+        else if(password.equals("Ingrese contraseña")){
+            errorLabel.setText("Error: ingrese todos los campos del formulario");
+        }
+        else if(!email.contains("@gmail.com") && !email.contains("@hotmail.com") && 
+                !email.contains("@correo.unimet.edu.ve") && !email.contains("@outlook.com")){
+            errorLabel.setText("Error: correo no valido");
+        }
+        else{
+            MongoDatabase dataBase = client.getDatabase("cowork");
+
+            MongoCollection users = dataBase.getCollection("users");
+            
+            Bson filter = Filters.eq("email", email);
+            
+            FindIterable<Document> result = users.find(filter);
+                        
+            Document user = null;
+            for(Document doc: result){                
+                String emailDoc = (String) doc.get("email");
+                String passwordDoc = (String) doc.get("password");
+                if(emailDoc.equals(email)){
+                    System.out.println(password);
+                    if(passwordDoc.equals(password)){
+                        user = doc;                        
+                    }
+                    else{
+                        errorLabel.setText("Error: contraseña erronea");
+                    }
+                }                
+            }
+            
+            if(user != null){
+            
+                String name = (String) user.get("name");
+                ArrayList<Group> groups = (ArrayList) user.get("tasks");
+                ArrayList<Task> task = (ArrayList) user.get("groups");
+                
+                User currentUser = new User(name, email, groups, task);
+                this.dispose();
+                new MainMenu(currentUser).setVisible(true);
+                
+            }
+            else{
+                errorLabel.setText("Error: correo o contraseña incorrecta");
+            }
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }//GEN-LAST:event_loginActionPerformed
 
     private void inputPasswordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_inputPasswordFocusGained
@@ -320,6 +404,7 @@ public class Login extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JButton exit;
     private javax.swing.JPanel header;
     private javax.swing.JTextField inputEmail;
@@ -332,3 +417,11 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel register;
     // End of variables declaration//GEN-END:variables
 }
+
+
+
+
+
+
+
+
