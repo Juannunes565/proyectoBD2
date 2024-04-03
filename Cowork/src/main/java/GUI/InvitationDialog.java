@@ -4,21 +4,34 @@
  */
 package GUI;
 
+import Classes.Group;
+import Classes.User;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import java.awt.Color;
+import java.util.ArrayList;
+import org.bson.Document;
 
 /**
  *
  * @author mairo
  */
-public class Window extends javax.swing.JFrame {
+public class InvitationDialog extends javax.swing.JFrame {
     int xMouse, yMouse;
-    /**
-     * Creates new form Window
-     */
-    public Window() {
+    static User currentUser;
+    static Group currentGroup;
+    static MongoClient client;
+    
+    public InvitationDialog(User currentUser, Group currentGroup, MongoClient client) {
         initComponents();
         exit.setFocusable(false);
         minimize.setFocusable(false);
+        
+        errorLabel.setText("");
+        this.currentUser = currentUser;
+        this.currentGroup = currentGroup;
+        this.client = client;
     }
 
     /**
@@ -35,6 +48,9 @@ public class Window extends javax.swing.JFrame {
         exit = new javax.swing.JButton();
         minimize = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        emailInput = new javax.swing.JTextField();
+        send = new javax.swing.JButton();
+        errorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -73,7 +89,7 @@ public class Window extends javax.swing.JFrame {
                 exitMouseExited(evt);
             }
         });
-        header.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 0, 30, 30));
+        header.add(exit, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 30, 30));
 
         minimize.setBackground(new java.awt.Color(252, 252, 252));
         minimize.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -90,20 +106,33 @@ public class Window extends javax.swing.JFrame {
                 minimizeMouseExited(evt);
             }
         });
-        header.add(minimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 30, 30));
+        header.add(minimize, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 30, 30));
 
         background.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
         background.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, 20));
+        background.add(emailInput, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 80, 270, -1));
+
+        send.setText("Enviar");
+        send.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendActionPerformed(evt);
+            }
+        });
+        background.add(send, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, -1, -1));
+
+        errorLabel.setForeground(new java.awt.Color(255, 0, 0));
+        errorLabel.setText("Error Label");
+        background.add(errorLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(background, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -146,6 +175,51 @@ public class Window extends javax.swing.JFrame {
         this.setLocation(x - xMouse, y - yMouse);
     }//GEN-LAST:event_headerMouseDragged
 
+    private void sendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendActionPerformed
+        String email = emailInput.getText();
+        
+        if(email.isBlank()){
+            errorLabel.setText("Error: ingrese todos los campos del formulario");
+        }
+        else{
+            
+            MongoDatabase dataBase = client.getDatabase("cowork");
+            MongoCollection users = dataBase.getCollection("users");
+            MongoCollection groups = dataBase.getCollection("groups");
+            
+            Document userQuery = new Document("email", email);
+            Document userResult = (Document) users.find(userQuery).first();
+            
+            Document groupQuery = new Document("nameGroup", currentGroup.getNameGroup());
+            Document groupResult = (Document) groups.find(groupQuery).first();
+            
+            ArrayList<String> invitations = (ArrayList) userResult.get("invitations");
+            ArrayList<Document> members = (ArrayList<Document>) groupResult.get("members");             
+            
+            boolean isMember = false;
+            for(Document member: members){
+                if(member.get("email").equals(currentUser.getEmail())){
+                    isMember = true;
+                }
+            }
+            
+            
+            if(!invitations.contains(currentGroup.getNameGroup()) && !isMember){
+                invitations.add(currentGroup.getNameGroup());
+
+                Document update = new Document("$set", new Document("invitations", invitations));
+
+                users.updateOne(userQuery, update);
+
+                this.dispose();                
+            }
+            else{
+                errorLabel.setText("Error: el usuario ya esta en el grupo");
+            }
+        }
+        
+    }//GEN-LAST:event_sendActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -163,29 +237,33 @@ public class Window extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InvitationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InvitationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InvitationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InvitationDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Window().setVisible(true);
+                new InvitationDialog(currentUser, currentGroup, client).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
+    private javax.swing.JTextField emailInput;
+    private javax.swing.JLabel errorLabel;
     private javax.swing.JButton exit;
     private javax.swing.JPanel header;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JButton minimize;
+    private javax.swing.JButton send;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,22 +13,14 @@ import java.util.ArrayList;
 public class User {
     private String name;
     private String email;
-    private ArrayList<Group> groups;
-    private ArrayList<Task> tasks;
+    private ArrayList invitations;
 
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-        this.groups = new ArrayList<Group>();
-        this.tasks = new ArrayList<Task>();
+        this.invitations = new ArrayList();
     }
 
-    public User(String name, String email, ArrayList<Group> groups, ArrayList<Task> tasks) {
-        this.name = name;
-        this.email = email;
-        this.groups = groups;
-        this.tasks = tasks;
-    }
 
     public String getName() {
         return name;
@@ -46,21 +38,16 @@ public class User {
         this.email = email;
     }
 
-    public ArrayList<Group> getGroups() {
-        return groups;
+    public ArrayList getInvitations() {
+        return invitations;
     }
 
-    public void setGroups(ArrayList<Group> groups) {
-        this.groups = groups;
+    public void setInvitations(ArrayList invitations) {
+        this.invitations = invitations;
     }
+    
+    
 
-    public ArrayList<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(ArrayList<Task> tasks) {
-        this.tasks = tasks;
-    }
     
     
     

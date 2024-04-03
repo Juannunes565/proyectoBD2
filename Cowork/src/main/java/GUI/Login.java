@@ -310,8 +310,7 @@ public class Login extends javax.swing.JFrame {
             for(Document doc: result){                
                 String emailDoc = (String) doc.get("email");
                 String passwordDoc = (String) doc.get("password");
-                if(emailDoc.equals(email)){
-                    System.out.println(password);
+                if(emailDoc.equals(email)){                    
                     if(passwordDoc.equals(password)){
                         user = doc;                        
                     }
@@ -324,12 +323,11 @@ public class Login extends javax.swing.JFrame {
             if(user != null){
             
                 String name = (String) user.get("name");
-                ArrayList<Group> groups = (ArrayList) user.get("tasks");
-                ArrayList<Task> task = (ArrayList) user.get("groups");
                 
-                User currentUser = new User(name, email, groups, task);
+                User currentUser = new User(name, email);
                 this.dispose();
-                new MainMenu(currentUser).setVisible(true);
+                System.out.println(client);
+                new MainMenu(currentUser, client).setVisible(true);
                 
             }
             else{

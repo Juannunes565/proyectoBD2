@@ -4,21 +4,45 @@
  */
 package GUI;
 
+import Classes.Group;
+import Classes.User;
+import com.mongodb.client.MongoClient;
 import java.awt.Color;
+import java.util.ArrayList;
+import org.bson.Document;
 
 /**
  *
  * @author mairo
  */
-public class Window extends javax.swing.JFrame {
+public class GroupView extends javax.swing.JFrame {
     int xMouse, yMouse;
-    /**
-     * Creates new form Window
-     */
-    public Window() {
+    static User currentUser;
+    static Group currentGroup;
+    static MongoClient client;
+    
+    public GroupView(User currentUser, Group currentGroup, MongoClient client) {
         initComponents();
         exit.setFocusable(false);
         minimize.setFocusable(false);
+        
+        this.currentUser = currentUser;
+        this.currentGroup = currentGroup;
+        this.client = client;
+        
+        groupNameOutput.setText(currentGroup.getNameGroup());
+        emailLeaderOutput.setText(currentGroup.getLeaderEmail());
+        
+        String membersStr = "";
+        ArrayList<Document> members = currentGroup.getMembers();
+        int count = 0;
+        for(Document member: members){
+            if(count == members.size()-1)membersStr += member.get("name");
+            else membersStr += member.get("name") + ", ";            
+        }
+        membersOutput.setText(membersStr);
+        
+        
     }
 
     /**
@@ -35,6 +59,15 @@ public class Window extends javax.swing.JFrame {
         exit = new javax.swing.JButton();
         minimize = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        groupNameOutput = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        emailLeaderOutput = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        membersOutput = new javax.swing.JTextArea();
+        invite = new javax.swing.JToggleButton();
+        createTask = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -95,6 +128,40 @@ public class Window extends javax.swing.JFrame {
         background.add(header, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
         background.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, 20));
 
+        jLabel2.setText("Nombre del grupo: ");
+        background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, -1, -1));
+
+        groupNameOutput.setText("groupName");
+        background.add(groupNameOutput, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+
+        jLabel4.setText("Correo del lider: ");
+        background.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+
+        emailLeaderOutput.setText("emailLeader");
+        background.add(emailLeaderOutput, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 90, -1, -1));
+
+        jLabel6.setText("Integrantres: ");
+        background.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+
+        membersOutput.setEditable(false);
+        membersOutput.setColumns(20);
+        membersOutput.setRows(5);
+        membersOutput.setBorder(null);
+        jScrollPane1.setViewportView(membersOutput);
+
+        background.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 540, 110));
+
+        invite.setText("Invitar");
+        invite.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inviteActionPerformed(evt);
+            }
+        });
+        background.add(invite, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 320, 110, -1));
+
+        createTask.setText("Crear tarea");
+        background.add(createTask, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 320, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -146,6 +213,10 @@ public class Window extends javax.swing.JFrame {
         this.setLocation(x - xMouse, y - yMouse);
     }//GEN-LAST:event_headerMouseDragged
 
+    private void inviteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inviteActionPerformed
+        new InvitationDialog(currentUser, currentGroup, client).setVisible(true);
+    }//GEN-LAST:event_inviteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -163,29 +234,39 @@ public class Window extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GroupView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GroupView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GroupView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Window.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GroupView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Window().setVisible(true);
+                new GroupView(currentUser, currentGroup, client).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
+    private javax.swing.JButton createTask;
+    private javax.swing.JLabel emailLeaderOutput;
     private javax.swing.JButton exit;
+    private javax.swing.JLabel groupNameOutput;
     private javax.swing.JPanel header;
+    private javax.swing.JToggleButton invite;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea membersOutput;
     private javax.swing.JButton minimize;
     // End of variables declaration//GEN-END:variables
 }

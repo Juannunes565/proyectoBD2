@@ -345,7 +345,7 @@ public class Register extends javax.swing.JFrame {
             errorLabel.setText("Error: Ingrese todos los campos del formulario");
         }
         else if(password.length() < 8){
-            errorLabel.setText("Error: contraseña muy corta");
+            errorLabel.setText("Error: contraseña no valida, minimo 8 caracteres");
         }
         else if(confirmPassword.equals("Confirmar contraseña") || confirmPassword.isBlank()){
             errorLabel.setText("Error: Ingrese todos los campos del formulario");
@@ -380,14 +380,13 @@ public class Register extends javax.swing.JFrame {
                         .append("name", user)
                         .append("email", email)
                         .append("password", password)
-                        .append("groups", new ArrayList<Group>())
-                        .append("tasks", new ArrayList<Task>());   
+                        .append("invitations", new ArrayList()); 
                 
                 users.insertOne(newUser);
                 
-                User currentUser = new User(user, email, new ArrayList<Group>(), new ArrayList<Task>());
+                User currentUser = new User(user, email);
                 this.dispose();
-                new MainMenu(currentUser).setVisible(true);
+                new MainMenu(currentUser, client).setVisible(true);
             }
             
         }

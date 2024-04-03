@@ -8,6 +8,12 @@ import Classes.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import javax.swing.JScrollPane;
+import GUI.ShowProfile;
+import com.mongodb.client.MongoClient;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 
 /**
  *
@@ -16,14 +22,17 @@ import java.awt.Dimension;
 public class MainMenu extends javax.swing.JFrame {
     int xMouse, yMouse;
     static User currentUser;
+    static MongoClient client;
     
     
-    public MainMenu(User currentUser) {
+    
+    public MainMenu(User currentUser, MongoClient client) {
         initComponents();
-        this.currentUser = currentUser;
-        this.setLocationRelativeTo(this);
         
-        showTasks.setFocusable(true);
+        this.currentUser = currentUser;
+        this.client = client;
+        this.setLocationRelativeTo(this); 
+        showCreateGroups.setFocusable(true);
         testLabel.setText("Hola " + currentUser.getName());
         exit.setFocusable(false);
         minimize.setFocusable(false);
@@ -47,10 +56,12 @@ public class MainMenu extends javax.swing.JFrame {
         testLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         leftContainer = new javax.swing.JPanel();
+        showCreateGroups = new javax.swing.JToggleButton();
         showTasks = new javax.swing.JToggleButton();
-        showGroups = new javax.swing.JToggleButton();
         showProfile = new javax.swing.JToggleButton();
-        rightContainer = new javax.swing.JPanel();
+        showGroups = new javax.swing.JToggleButton();
+        showInvitations = new javax.swing.JToggleButton();
+        rightContainer = new javax.swing.JScrollPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -117,6 +128,17 @@ public class MainMenu extends javax.swing.JFrame {
         leftContainer.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
         leftContainer.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        showCreateGroups.setBackground(new java.awt.Color(252, 252, 252));
+        buttonGroup.add(showCreateGroups);
+        showCreateGroups.setText("Crear grupo");
+        showCreateGroups.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        showCreateGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showCreateGroupsActionPerformed(evt);
+            }
+        });
+        leftContainer.add(showCreateGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 110, 80));
+
         showTasks.setBackground(new java.awt.Color(252, 252, 252));
         buttonGroup.add(showTasks);
         showTasks.setText("Ver tareas");
@@ -126,33 +148,45 @@ public class MainMenu extends javax.swing.JFrame {
                 showTasksActionPerformed(evt);
             }
         });
-        leftContainer.add(showTasks, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 80));
-
-        showGroups.setBackground(new java.awt.Color(252, 252, 252));
-        buttonGroup.add(showGroups);
-        showGroups.setText("Ver grupos");
-        showGroups.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
-        leftContainer.add(showGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 110, 80));
+        leftContainer.add(showTasks, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 110, 80));
 
         showProfile.setBackground(new java.awt.Color(252, 252, 252));
         buttonGroup.add(showProfile);
         showProfile.setText("Ver perfil");
         showProfile.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
-        leftContainer.add(showProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 160, 110, 80));
+        showProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showProfileActionPerformed(evt);
+            }
+        });
+        leftContainer.add(showProfile, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 110, 80));
+
+        showGroups.setBackground(new java.awt.Color(252, 252, 252));
+        buttonGroup.add(showGroups);
+        showGroups.setText("Ver grupos");
+        showGroups.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        showGroups.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showGroupsActionPerformed(evt);
+            }
+        });
+        leftContainer.add(showGroups, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 110, 80));
+
+        showInvitations.setBackground(new java.awt.Color(252, 252, 252));
+        buttonGroup.add(showInvitations);
+        showInvitations.setText("Ver invitaciones");
+        showInvitations.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        showInvitations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showInvitationsActionPerformed(evt);
+            }
+        });
+        leftContainer.add(showInvitations, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 240, 110, 80));
 
         background.add(leftContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 110, 470));
 
-        javax.swing.GroupLayout rightContainerLayout = new javax.swing.GroupLayout(rightContainer);
-        rightContainer.setLayout(rightContainerLayout);
-        rightContainerLayout.setHorizontalGroup(
-            rightContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
-        );
-        rightContainerLayout.setVerticalGroup(
-            rightContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
-        );
-
+        rightContainer.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        rightContainer.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         background.add(rightContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 620, 470));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -171,7 +205,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void exitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseClicked
         exit.setBackground(Color.red);
-        System.exit(0);
+        this.dispose();
     }//GEN-LAST:event_exitMouseClicked
 
     private void exitMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitMouseEntered
@@ -206,16 +240,59 @@ public class MainMenu extends javax.swing.JFrame {
         this.setLocation(x - xMouse, y - yMouse);
     }//GEN-LAST:event_headerMouseDragged
 
-    private void showTasksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTasksActionPerformed
-        ShowTasks panel = new ShowTasks();             
+    private void showCreateGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showCreateGroupsActionPerformed
+        CreateGroups panel = new CreateGroups(currentUser, client);   
         panel.setLocation(0, 0);
         
-        rightContainer.removeAll();
-        rightContainer.setPreferredSize(new Dimension(rightContainer.getWidth(), panel.getHeight()));
-        rightContainer.add(panel);
+        rightContainer.setViewportView(panel);
+        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);                
+        rightContainer.setViewportView(panel);
         rightContainer.revalidate();
         rightContainer.repaint();        
+    }//GEN-LAST:event_showCreateGroupsActionPerformed
+
+    private void showGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGroupsActionPerformed
+        ShowGroups panel = new ShowGroups(currentUser, client);   
+        panel.setLocation(0, 0);
+        
+        rightContainer.setViewportView(panel);
+        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);                
+        rightContainer.setViewportView(panel);
+        rightContainer.revalidate();
+        rightContainer.repaint();  
+         
+    }//GEN-LAST:event_showGroupsActionPerformed
+
+    private void showProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showProfileActionPerformed
+        // TODO add your handling code here:        
+        ShowProfile panel = new ShowProfile(currentUser, client);   
+        panel.setLocation(0, 0);
+        
+        rightContainer.setViewportView(panel);
+        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);                
+        rightContainer.setViewportView(panel);
+        rightContainer.revalidate();
+        rightContainer.repaint();        
+    }//GEN-LAST:event_showProfileActionPerformed
+
+    private void showTasksActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showTasksActionPerformed
+         
     }//GEN-LAST:event_showTasksActionPerformed
+
+    private void showInvitationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showInvitationsActionPerformed
+        ShowInvitations panel = new ShowInvitations(currentUser, client);   
+        panel.setLocation(0, 0);
+        
+        rightContainer.setViewportView(panel);
+        rightContainer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        rightContainer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);                
+        rightContainer.setViewportView(panel);
+        rightContainer.revalidate();
+        rightContainer.repaint();  
+    }//GEN-LAST:event_showInvitationsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,7 +325,7 @@ public class MainMenu extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainMenu(currentUser).setVisible(true);
+                new MainMenu(currentUser, client).setVisible(true);
             }
         });
     }
@@ -261,8 +338,10 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel leftContainer;
     private javax.swing.JButton minimize;
-    private javax.swing.JPanel rightContainer;
+    private javax.swing.JScrollPane rightContainer;
+    private javax.swing.JToggleButton showCreateGroups;
     private javax.swing.JToggleButton showGroups;
+    private javax.swing.JToggleButton showInvitations;
     private javax.swing.JToggleButton showProfile;
     private javax.swing.JToggleButton showTasks;
     private javax.swing.JLabel testLabel;
